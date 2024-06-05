@@ -1,0 +1,11 @@
+torch
+torchvision
+wandb
+numpy
+scikit-learn
+tqdm
+pybind11
+pandas
+opencv-python
+scikit-image
+torchmetrics
