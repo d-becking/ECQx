@@ -4,6 +4,10 @@
 
 - ECQx is an e**X**plainability-driven version of ECQ which corrects cluster assignments based on their relevance [(Becking et al., 2022)](https://link.springer.com/chapter/10.1007/978-3-031-04083-2_14).
 
+<div align="center">
+<img src="https://github.com/d-becking/ECQx/assets/56083075/67e3aff6-25d6-4771-97f0-6651b3ef2737"  width="600">
+</div>
+
 ## Table of Contents
 - [Information](#information)
 - [Installation](#installation)
