@@ -69,7 +69,7 @@ parser.add_argument('--wandb_key', type=str, default='', help='Authentication ke
 parser.add_argument('--wandb_run_name', type=str, default='ECQx_NNCodec', help='Identifier for current run')
 parser.add_argument("--verbose", action="store_true", help='Stdout process information.')
 parser.add_argument('--bitwidth', type=int, default=4, help='Number of bits for quantization, i.e., weight precision (default: 4)')
-parser.add_argument('--Lambda', type=float, default=0.05, help='Entropy constraint for Quantization (default: 0.05)')
+parser.add_argument('--Lambda', type=float, default=0.05, help='Entropy constraint for quantization. Higher values introduce more sparsity. (default: 0.05)')
 parser.add_argument("--lrp", action="store_true", help='Use LRP as quantization criterium.')
 parser.add_argument("--lrp_output", default="output", help='Output type that is backpropagated for LRP (default: "output" of ["ones", "probability", "output"]).', type=str)
 parser.add_argument("--lrp_composite", default="epsilon_plus_flat_bn_pass", help='Composite for LRP calculations (default: "epsilon_plus_flat_bn_pass").', type=str)
@@ -80,7 +80,7 @@ parser.add_argument("--alpha", default=0.1, help='Amount of previous relevance u
 
 def main():
     args = parser.parse_args()
-    nnc_compression = True
+    nnc_compression = True # compresses the integer representation of the ECQ(x) obtained weights using NNCodec and saves it to a *.nnc bitstream
     stopping_patience, min_delta = 4, 0.1  # early stopping config
 
     ### model determinism / reproducibility
@@ -144,7 +144,7 @@ def main():
     ini_perf = evaluate_model(model, device=working_mdl.device, testloader=test_loader, verbose=args.verbose, max_batches=args.max_batches)
 
     ##################################### Pre-Training ##########################################
-    pretrain_best = ini_perf[1]
+    pretrain_best = ini_perf[0] # change to 1 for mIoU or 2 for loss
     if args.pretrain_epochs > 0:
         for epoch in range(args.pretrain_epochs):
             print('Pre-train Epoch: %d' % epoch)
@@ -160,12 +160,12 @@ def main():
                                        max_batches=args.max_batches,
                                        verbose=args.verbose
                                        )
-            if epoch > 0 and pretrain_perf[1] < pretrain_best + min_delta: # early stopping
+            if epoch > 0 and pretrain_perf[0] < pretrain_best + min_delta: # early stopping
                 patience_counter += 1
             else:
                 patience_counter = 0
-            if pretrain_perf[1] > pretrain_best:
-                pretrain_best = pretrain_perf[1]
+            if pretrain_perf[0] > pretrain_best:
+                pretrain_best = pretrain_perf[0]
                 print(f'saving pretrained model epoch {epoch} to {savedir+f"_pretrain.pt"}')
                 torch.save(working_mdl.model.state_dict(), savedir+f"_pretrain.pt")
             if patience_counter == stopping_patience:
@@ -282,12 +282,12 @@ def main():
                         "rec_test_top1": rec_test_perf[0], "rec_test_miou": test_perf[1], "rec_test_loss": rec_test_perf[2]})
 
 
-        if epoch > 0 and test_perf[1] < best_perf + min_delta:  # early stopping
+        if epoch > 0 and test_perf[0] < best_perf + min_delta:  # early stopping
             patience_counter += 1
         else:
             patience_counter = 0
-        if test_perf[1] > best_perf:
-            best_perf = test_perf[1]
+        if test_perf[0] > best_perf:
+            best_perf = test_perf[0]
             torch.save(working_mdl.model.state_dict(), savedir+".pt")
             print(f"Saved model to {savedir}")
         if patience_counter == stopping_patience:
