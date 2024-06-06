@@ -1,8 +1,10 @@
 # ECQx: Explainability-Driven Quantization for Low-Bit and Sparse DNNs
 
-- ECQ: **E**ntropy-**C**onstrained (trained) **Q**uantization as described in [(Becking et al., 2020)](https://www.researchgate.net/profile/Daniel-Becking/publication/354987516_Finding_Storage-_and_Compute-Efficient_Convolutional_Neural_Networks/links/6156f041a6fae644fbb6a2a8/Finding-Storage-and-Compute-Efficient-Convolutional-Neural-Networks.pdf) and applied to ternary neural networks [(Marban et al., 2020)](https://openaccess.thecvf.com/content_CVPRW_2020/html/w40/Marban_Learning_Sparse__Ternary_Neural_Networks_With_Entropy-Constrained_Trained_Ternarization_CVPRW_2020_paper.html) as well as 4bit hardware-software co-design aware neural networks running on FPGA and the "_FantastIC4_" 22nm ASIC [(Wiedemann et al., 2021)](https://ieeexplore.ieee.org/abstract/document/9440253).
+- `ECQ` refers to **E**ntropy-**C**onstrained (trained) **Q**uantization as described in [(Becking et al., 2020)](https://www.researchgate.net/profile/Daniel-Becking/publication/354987516_Finding_Storage-_and_Compute-Efficient_Convolutional_Neural_Networks/links/6156f041a6fae644fbb6a2a8/Finding-Storage-and-Compute-Efficient-Convolutional-Neural-Networks.pdf) 
+and applied to ternary neural networks by the "_EC2T_" algorithm [(Marban et al., 2020)](https://openaccess.thecvf.com/content_CVPRW_2020/html/w40/Marban_Learning_Sparse__Ternary_Neural_Networks_With_Entropy-Constrained_Trained_Ternarization_CVPRW_2020_paper.html) 
+as well as 4bit hardware-software co-design-aware neural networks running on FPGA and the "_FantastIC4_" 22nm ASIC [(Wiedemann et al., 2021)](https://ieeexplore.ieee.org/abstract/document/9440253).
 
-- ECQx is an e**X**plainability-driven version of ECQ which corrects cluster assignments based on their relevance [(Becking et al., 2022)](https://link.springer.com/chapter/10.1007/978-3-031-04083-2_14).
+- `ECQx` is an e**X**plainability-driven version of ECQ which corrects cluster assignments based on their relevances [(Becking et al., 2022)](https://link.springer.com/chapter/10.1007/978-3-031-04083-2_14).
 
 <div align="center">
 <img src="https://github.com/d-becking/ECQx/assets/56083075/67e3aff6-25d6-4771-97f0-6651b3ef2737"  width="600">
