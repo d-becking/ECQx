@@ -1,6 +1,6 @@
 # ECQx: Explainability-Driven Quantization for Low-Bit and Sparse DNNs
 
-- ECQ: **E**ntropy-**C**onstrained (trained) **Q**uantization as described in [(Becking et al., 2020)](https://www.researchgate.net/profile/Daniel-Becking/publication/354987516_Finding_Storage-_and_Compute-Efficient_Convolutional_Neural_Networks/links/6156f041a6fae644fbb6a2a8/Finding-Storage-and-Compute-Efficient-Convolutional-Neural-Networks.pdf), and applied to Ternary Networks [(Marban et al., 2020)](https://openaccess.thecvf.com/content_CVPRW_2020/html/w40/Marban_Learning_Sparse__Ternary_Neural_Networks_With_Entropy-Constrained_Trained_Ternarization_CVPRW_2020_paper.html) and a 4bit Hardware-Software Co-Design [(Wiedemann et al., 2021)](https://ieeexplore.ieee.org/abstract/document/9440253).
+- ECQ: **E**ntropy-**C**onstrained (trained) **Q**uantization as described in [(Becking et al., 2020)](https://www.researchgate.net/profile/Daniel-Becking/publication/354987516_Finding_Storage-_and_Compute-Efficient_Convolutional_Neural_Networks/links/6156f041a6fae644fbb6a2a8/Finding-Storage-and-Compute-Efficient-Convolutional-Neural-Networks.pdf), and applied to Ternary Neural Networks [(Marban et al., 2020)](https://openaccess.thecvf.com/content_CVPRW_2020/html/w40/Marban_Learning_Sparse__Ternary_Neural_Networks_With_Entropy-Constrained_Trained_Ternarization_CVPRW_2020_paper.html) as well as 4bit hardware-software co-design aware neural networks running on FPGA and the "_FantastIC4_" 22nm ASIC [(Wiedemann et al., 2021)](https://ieeexplore.ieee.org/abstract/document/9440253).
 
 - ECQx is an e**X**plainability-driven version of ECQ which corrects cluster assignments based on their relevance [(Becking et al., 2022)](https://link.springer.com/chapter/10.1007/978-3-031-04083-2_14).
 
@@ -26,7 +26,7 @@ How to run the code, reproduce paper results and run the demo is described in th
 
 ## Installation
 
-The software provides python packages which can be installed using pip. However, core technologies are implemented using C++, which requires a C++ compiler for the installation process.
+The software utilizes python packages which can be installed using pip. However, core coding technologies of NNC are implemented using C++, which requires a C++ compiler for the installation process.
 
 The software has been tested on different target platforms (mainly Linux and macOS).
 
@@ -63,32 +63,35 @@ Execute
 ```shell
 python run.py --help
 ```
-for parser argument descriptions.
+for more detailed help on parser argument descriptions.
+
+### Logging results using Weights & Biases
+
+We used Weights & Biases (wandb) for experiment logging. It is enabled by `--wandb`. If you want to use it, add your `--wandb_key` and optionally an experiment identifier for the run (`--wandb_run_name`).
+
 
 ### Reproducibility of paper results
 
-[TBD]
-
 #### CIFAR-10 experiments (w/ ResNet20):
 
-`--dataset_path` must be specified in accordance with your local data directories. For the CIFAR experiment, the data will be downloaded (< 200MB) to --dataset_path if the data is not already available there (defaults to "../data").
+`--dataset_path` must be specified in accordance with your local data directories. For the CIFAR experiment, the data will be downloaded (< 200MB) to `--dataset_path`, which defaults to "../data", if the data is not already available there.
 
-Basic setting with default hyperparameters and parser arguments for running 4bit ECQ (without x) on CIFAR10 with an already pre-trained ResNet20:
+- Basic setting with default hyperparameters and parser arguments for running 4bit **ECQ** (without x) on CIFAR10 with an already pre-trained ResNet20:
 
-```shell
-python run.py --model_path=./models/pretrained/resnet20.pt --dataset_path=<YOUR_PATH> --verbose
-```
+  ```shell
+  python run.py --model_path=./models/pretrained/resnet20.pt --dataset_path=<YOUR_PATH> --verbose
+  ```
 
-Basic setting for running 4bit ECQx on CIFAR10 with an already pre-trained ResNet20:
+- Basic setting for running 4bit **ECQx** on CIFAR10 with an already pre-trained ResNet20:
 
-```shell
-python run.py --lrp --model_path=./models/pretrained/resnet20.pt --dataset_path=<YOUR_PATH> --verbose
-```
-The above command generates LRP relevances using the default "_resnet_" `--canonizer`, and the "_epsilon_plus_flat_bn_pass_" `--lrp_composite`.
+  ```shell
+  python run.py --lrp --model_path=./models/pretrained/resnet20.pt --dataset_path=<YOUR_PATH> --verbose
+  ```
+  The above command generates LRP relevances using the default "_resnet_" `--canonizer`, and the "_epsilon_plus_flat_bn_pass_" `--lrp_composite`.
 
-For simple network architectures, e.g., without BatchNorm modules and without residual connections, it is recommended to use "_vgg_" or "_resnetcifar_" `--canonizer`s, otherwise "_resnet_" or "_mobilenet_" `--canonizer`s.
+  For simple network architectures, e.g., without BatchNorm modules and without residual connections, it is recommended to use "_vgg_" or "_resnetcifar_" `--canonizer`s, otherwise "_resnet_" or "_mobilenet_" `--canonizer`s.
 
-Investigating different `--lrp_composite`s can also improve the ECQx performance. We recommend "_epsilon_plus_flat_bn_pass_", "_epsilon_plus_flat_", "_alpha2_beta1_flat_bn_pass_", and "_alpha2_beta1_flat_".
+  Investigating different `--lrp_composite`s can also improve the ECQx performance: For instance, we recommend "_epsilon_plus_flat_bn_pass_", "_epsilon_plus_flat_", "_alpha2_beta1_flat_bn_pass_", and "_alpha2_beta1_flat_".
 
 Increasing the `--Lambda` hyperparameter will intensify the entropy constraint and thus lead to a higher sparsity (and thus performance degradation, which can be compensated to a certain extent by ECQx).
 
@@ -96,15 +99,9 @@ Increasing the `--Lambda` hyperparameter will intensify the entropy constraint a
 
 [TBD]
 
-### Logging results using Weights & Biases
-
-We used Weights & Biases (wandb) for experiment logging. Enabling `--wandb`. If you want to use it, add your `--wandb_key` and optionally an experiment identifier for the run (`--wandb_run_name`).
-
-
 ### Demo
 
 [TBD]
-
 
 
 ## Citation and Publications
